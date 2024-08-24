@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Didáctico MR</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <div class="logo">
+            <h1>Material Didáctico MR</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#galeria">Galería</a></li>
+                <li><a href="#material">Subir y Comprar Material</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sección de Inicio -->
+    <section id="inicio" class="hero">
+        <h2>Bienvenidos a Material Didáctico MR</h2>
+        <p>Recursos innovadores para potenciar la educación.</p>
+        <a href="#servicios" class="btn">Ver Servicios</a>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section id="servicios" class="services">
+        <h2>Nuestros Servicios</h2>
+        <div class="service-item">
+            <h3>Material Digital</h3>
+            <p>Ofrecemos material didáctico digital para docentes que facilita el proceso de enseñanza-aprendizaje.</p>
+        </div>
+        <div class="service-item">
+            <h3>Capacitación</h3>
+            <p>Brindamos talleres y capacitaciones para mejorar la práctica docente con herramientas digitales.</p>
+        </div>
+        <div class="service-item">
+            <h3>Consultoría Educativa</h3>
+            <p>Asesoría personalizada para la implementación de recursos digitales en instituciones educativas.</p>
+        </div>
+    </section>
+
+    <!-- Galería de Productos -->
+    <section id="galeria" class="gallery">
+        <h2>Nuestros Productos</h2>
+        <div class="gallery-item">
+            <img src="producto1.jpg" alt="Producto 1">
+            <h4>Guías Didácticas</h4>
+        </div>
+        <div class="gallery-item">
+            <img src="producto2.jpg" alt="Producto 2">
+            <h4>Presentaciones Interactivas</h4>
+        </div>
+        <div class="gallery-item">
+            <img src="producto3.jpg" alt="Producto 3">
+            <h4>Videos Educativos</h4>
+        </div>
+    </section>
+
+    <!-- Sección de Subir y Comprar Material -->
+    <section id="material" class="upload-purchase">
+        <h2>Sube tu Material y Cómpralo</h2>
+        <form action="subir.php" method="post" enctype="multipart/form-data">
+            <label for="archivo">Subir Material:</label>
+            <input type="file" id="archivo" name="archivo" required>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" required></textarea>
+
+            <button type="submit">Subir</button>
+        </form>
+
+        <div class="products">
+            <h3>Material Disponible para Compra</h3>
+            <div class="product-item">
+                <img src="producto1.jpg" alt="Producto 1">
+                <h4>Guía Didáctica 1</h4>
+                <p>$10.00</p>
+                <button>Comprar</button>
+            </div>
+            <div class="product-item">
+                <img src="producto2.jpg" alt="Producto 2">
+                <h4>Presentación Interactiva 1</h4>
+                <p>$15.00</p>
+                <button>Comprar</button>
+            </div>
+            <!-- Añadir más productos según sea necesario -->
+        </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section id="contacto" class="contact">
+        <h2>Contáctanos</h2>
+        <form action="enviar.php" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" required></textarea>
+
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Material Didáctico MR. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
