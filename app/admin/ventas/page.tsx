@@ -1,4 +1,4 @@
- "use client";
+  "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -35,9 +35,8 @@ type MonthSummary = {
 const money = (amount: number) =>
   `₡${Number(amount || 0).toLocaleString("es-CR")}`;
 
-function getPeriodStart(period: Period): Date | null {
-  const now = new Date();
-  const start = new Date(now);
+function getPeriodStart(period: Period, referenceDate: Date): Date | null {
+  const start = new Date(referenceDate);
   start.setHours(0, 0, 0, 0);
 
   if (period === "today") return start;
@@ -74,6 +73,7 @@ export default function AdminVentasPage() {
   const [error, setError] = useState("");
   const [lastUpdated, setLastUpdated] = useState("");
   const [period, setPeriod] = useState<Period>("all");
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
 
   const loadDashboard = useCallback(async () => {
     setLoading(true);
@@ -132,14 +132,16 @@ export default function AdminVentasPage() {
   }, [router]);
 
   useEffect(() => {
+    setCurrentDate(new Date());
     loadDashboard();
   }, [loadDashboard]);
 
   const periodOrders = useMemo(() => {
-    const start = getPeriodStart(period);
+    if (!currentDate) return orders;
+    const start = getPeriodStart(period, currentDate);
     if (!start) return orders;
     return orders.filter((order) => new Date(order.created_at) >= start);
-  }, [orders, period]);
+  }, [orders, period, currentDate]);
 
   const completedOrders = periodOrders.filter((order) =>
     COMPLETED_STATUSES.includes(order.status)
@@ -197,26 +199,30 @@ export default function AdminVentasPage() {
     .map(([format, amount]) => ({ format, amount }))
     .sort((a, b) => b.amount - a.amount);
 
-  const now = new Date();
-  const monthSummaries: MonthSummary[] = [];
-  for (let offset = 5; offset >= 0; offset--) {
-    const monthDate = new Date(now.getFullYear(), now.getMonth() - offset, 1);
-    const key = `${monthDate.getFullYear()}-${String(monthDate.getMonth() + 1).padStart(2, "0")}`;
-    const amount = orders
-      .filter((order) => COMPLETED_STATUSES.includes(order.status))
-      .filter((order) => {
-        const date = new Date(order.created_at);
-        return date.getFullYear() === monthDate.getFullYear() &&
-          date.getMonth() === monthDate.getMonth();
-      })
-      .reduce((sum, order) => sum + order.total_amount, 0);
+  const monthSummaries: MonthSummary[] = currentDate
+    ? Array.from({ length: 6 }, (_, index) => 5 - index).map((offset) => {
+        const monthDate = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() - offset,
+          1
+        );
+        const key = `${monthDate.getFullYear()}-${String(monthDate.getMonth() + 1).padStart(2, "0")}`;
+        const amount = orders
+          .filter((order) => COMPLETED_STATUSES.includes(order.status))
+          .filter((order) => {
+            const date = new Date(order.created_at);
+            return date.getFullYear() === monthDate.getFullYear() &&
+              date.getMonth() === monthDate.getMonth();
+          })
+          .reduce((sum, order) => sum + order.total_amount, 0);
 
-    monthSummaries.push({
-      key,
-      label: monthDate.toLocaleDateString("es-CR", { month: "short" }),
-      amount,
-    });
-  }
+        return {
+          key,
+          label: monthDate.toLocaleDateString("es-CR", { month: "short" }),
+          amount,
+        };
+      })
+    : [];
   const maxMonthAmount = Math.max(...monthSummaries.map((month) => month.amount), 1);
 
   function downloadReport() {

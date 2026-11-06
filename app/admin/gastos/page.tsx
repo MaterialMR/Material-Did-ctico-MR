@@ -1,4 +1,4 @@
-
+ 
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -71,7 +71,7 @@ export default function AdminGastosPage() {
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [amount, setAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState(METHODS[0]);
-  const [expenseDate, setExpenseDate] = useState(localDate());
+  const [expenseDate, setExpenseDate] = useState("");
   const [notes, setNotes] = useState("");
 
   const [search, setSearch] = useState("");
@@ -110,6 +110,7 @@ export default function AdminGastosPage() {
   }, [router]);
 
   useEffect(() => {
+    setExpenseDate(localDate());
     loadExpenses();
   }, [loadExpenses]);
 
