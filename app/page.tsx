@@ -1,4 +1,4 @@
- "use client";
+  "use client";
 
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
@@ -39,6 +39,8 @@ type Product = {
   featured: boolean;
   category: string;
 };
+
+const ADMIN_UID = "42755f00-5e71-41ef-9b11-a2446e290676";
 
 const categoryOrder = [
   "preescolar",
@@ -144,6 +146,8 @@ export default function Home() {
       item.productId === productId && item.format === format ? { ...item, quantity } : item
     ));
   }
+
+  const isAdmin = currentUser?.id === ADMIN_UID;
 
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -425,7 +429,7 @@ export default function Home() {
                       <>
                         <div className="border-b border-purple-100 bg-gradient-to-r from-purple-50 to-pink-50 px-4 py-4">
                           <p className="text-[11px] font-bold uppercase tracking-wider text-purple-500">
-                            Cuenta del cliente
+                            {isAdmin ? "Cuenta de administrador" : "Cuenta del cliente"}
                           </p>
                           <p className="mt-1 truncate text-sm font-extrabold text-purple-950">
                             {currentUser.user_metadata?.full_name || "Cliente"}
@@ -435,24 +439,38 @@ export default function Home() {
                           </p>
                         </div>
 
-                        <a
-                          href="/mi-perfil"
-                          role="menuitem"
-                          onClick={() => setAccountMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-purple-50 hover:text-purple-900"
-                        >
-                          <span className="text-lg">👤</span>
-                          <span>Mi perfil</span>
-                        </a>
-                        <a
-                          href="/mis-pedidos"
-                          role="menuitem"
-                          onClick={() => setAccountMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-purple-50 hover:text-purple-900"
-                        >
-                          <span className="text-lg">📦</span>
-                          <span>Mis pedidos</span>
-                        </a>
+                        {isAdmin ? (
+                          <a
+                            href="/admin"
+                            role="menuitem"
+                            onClick={() => setAccountMenuOpen(false)}
+                            className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-purple-800 transition hover:bg-purple-50"
+                          >
+                            <span className="text-lg">🛠️</span>
+                            <span>Panel administrativo</span>
+                          </a>
+                        ) : (
+                          <>
+                            <a
+                              href="/mi-perfil"
+                              role="menuitem"
+                              onClick={() => setAccountMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-purple-50 hover:text-purple-900"
+                            >
+                              <span className="text-lg">👤</span>
+                              <span>Mi perfil</span>
+                            </a>
+                            <a
+                              href="/mis-pedidos"
+                              role="menuitem"
+                              onClick={() => setAccountMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-purple-50 hover:text-purple-900"
+                            >
+                              <span className="text-lg">📦</span>
+                              <span>Mis pedidos</span>
+                            </a>
+                          </>
+                        )}
                         <div className="border-t border-slate-100 p-2">
                           <button
                             type="button"
